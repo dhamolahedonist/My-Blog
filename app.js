@@ -2,6 +2,7 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 require("dotenv").config();
+require("./server/config/db").connectToMongoDB();
 
 const PORT = process.env.PORT;
 
