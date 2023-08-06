@@ -40,20 +40,23 @@
 </div>
 
 <section class="article">
-  <h2 class="article__heading">Latest Posts</h2>
+  <h1 class="article__heading" style="font-size: x-large">Latest Posts</h1>
   <ul class="article-ul">
+    <% data.forEach(post => { %>
     <li>
-      <a href="#">
-        <span>Post Title</span>
-        <span class="article-list__date">Date</span>
+      <a href="/post/<%= post._id %>">
+        <span style="font-size: medium"><%= post.title %></span>
+        <span style="font-size: medium" class="article-list__date"
+          ><%= post.createdAt.toDateString() %></span
+        >
       </a>
     </li>
-    <li>
-      <a href="#">
-        <span>Post Title</span>
-        <span class="article-list__date">Date</span>
-      </a>
-    </li>
+
+    <% }) %>
   </ul>
-  <a href="#" class="pagination">&lt; View Older Posts</a>
+  <% if (nextPage !== null) { %>
+  <a style="font-size: medium" href="/?page=<%= nextPage %>" class="pagination"
+    >&lt; View Older Posts</a
+  >
+  <% } %>
 </section>
