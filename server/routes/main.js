@@ -24,6 +24,7 @@ router.get("", async (req, res) => {
       data,
       current: page,
       nextPage: hasNextPage ? nextPage : null,
+      currentRoute: "/",
     });
   } catch (error) {
     console.log(error);
@@ -38,10 +39,32 @@ router.get("/post/:id", async (req, res) => {
     const locals = {
       title: data.title,
       description: "Simple Blog created with NodeJs, Express and Mongodb",
+      currentRoute: `/post/${slug}`,
     };
     res.render("post", { locals, data });
   } catch (error) {
     console.log(error);
+  }
+});
+
+router.post("/like/:id", async (req, res) => {
+  const postId = req.params.id;
+  try {
+    // Find the post by ID in the database
+    const post = await Post.findById(postId);
+    // Increment the like_count
+    post.like_count++;
+    // Save the updated post in the database
+    await post.save();
+    res.status(200).json({
+      message: "Post liked successfully",
+      like_count: post.like_count,
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while liking the post" });
   }
 });
 
@@ -84,7 +107,7 @@ router.post("/search", async (req, res) => {
 });
 
 router.get("/about", (req, res) => {
-  res.render("about");
+  res.render("about", { currentRoute: "/about" });
 });
 
 // GET Home

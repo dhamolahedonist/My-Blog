@@ -2,10 +2,12 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const session = require("express-session");
+const methodOverride = require("method-override");
 require("dotenv").config();
 require("./server/config/db").connectToMongoDB();
 const cookieParser = require("cookie-parser");
 const MongoStore = require("connect-mongo");
+const { isActiveRoute } = require("./server/helpers/routeHelpers");
 
 const PORT = process.env.PORT;
 
@@ -16,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(methodOverride("_method"));
 
 app.use(
   session({
@@ -35,6 +38,7 @@ app.set("view engine", "ejs"); // Replace 'ejs' with your template engine (e.g.,
 // app.set("views", path.join(__dirname, "views"));
 // app.use(bodyParser.urlencoded({ extended: true }));
 
+app.locals.isActiveRoute = isActiveRoute;
 app.use("/", require("./server/routes/main"));
 app.use("/", require("./server/routes/admin"));
 
